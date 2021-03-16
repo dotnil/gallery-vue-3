@@ -1,6 +1,14 @@
 <template>
   <div class="gallery">
-    <img class="gallery__image" :src="currentPhotoPath" />
+    <link v-for="photo in photos" :key="photo" rel="preload" as="image" :href="photo" />
+    <img
+      v-for="(photo, index) in photos"
+      v-show="isCurrentPhoto(index)"
+      :key="photo"
+      class="gallery__image"
+      :src="photo"
+      rel="prefetch"
+    />
     <div class="gallery__right-arrow" @click="increment">ᐅ</div>
     <div class="gallery__left-arrow" @click="decrement">ᐊ</div>
   </div>
@@ -19,11 +27,6 @@ export default {
         require("../assets/image-6.jpg")
       ],
       currentPhoto: 0
-    }
-  },
-  computed: {
-    currentPhotoPath() {
-      return this.photos[this.currentPhoto]
     }
   },
   created() {
@@ -55,6 +58,9 @@ export default {
       }
 
       this.currentPhoto--
+    },
+    isCurrentPhoto(index) {
+      return index === this.currentPhoto
     }
   }
 }
